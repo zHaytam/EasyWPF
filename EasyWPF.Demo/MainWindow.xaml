@@ -5,27 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasyWPF.Demo"
         xmlns:easywpf="clr-namespace:EasyWPF.Helpers;assembly=EasyWPF"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="384.111" Width="525">
     <Grid Margin="0,0,0,-21">
-        <Button Content="IsNull" Visibility="Hidden"
+        <Button Content="IsNull"
                 easywpf:VisibilityHelper.VisibleIf="{Binding Test}"
                 easywpf:VisibilityHelper.VisibleIfOption="IsNull"
-                HorizontalAlignment="Left" Margin="97,29,0,0" VerticalAlignment="Top" Width="104" Height="44"/>
-        <Button Content="Change" HorizontalAlignment="Left" Margin="277,29,0,0" VerticalAlignment="Top" Width="142" Height="44" Click="Button_Click"/>
+                HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Top" Width="104" Height="44"/>
+        <Button Content="Change" HorizontalAlignment="Left" Margin="128,10,0,0" VerticalAlignment="Top" Width="94" Height="35" Click="Button_Click"/>
         <Button Content="IsNotNull" 
             easywpf:VisibilityHelper.VisibleIf="{Binding Test}"
             easywpf:VisibilityHelper.VisibleIfOption="IsNotNull"
-            HorizontalAlignment="Left" Margin="97,91,0,0" VerticalAlignment="Top" Width="104" Height="44"/>
-        <Button Content="Change" HorizontalAlignment="Left" Margin="277,91,0,0" VerticalAlignment="Top" Width="142" Height="44" Click="Button_Click" />
-        <Button Content="Add Item" HorizontalAlignment="Left" Margin="277,150,0,0" VerticalAlignment="Top" Width="142" Height="51" Click="Button_Click_1" />
+            HorizontalAlignment="Left" Margin="12,72,0,0" VerticalAlignment="Top" Width="104" Height="44"/>
+        <Button Content="Change" HorizontalAlignment="Left" Margin="128,59,0,0" VerticalAlignment="Top" Width="94" Height="35" Click="Button_Click" />
+        <Button Content="Add Item" HorizontalAlignment="Left" Margin="128,106,0,0" VerticalAlignment="Top" Width="94" Height="40" Click="Button_Click_1" />
         <ListBox ItemsSource="{Binding Items}"
                  Name="LbItems"
                  easywpf:VisibilityHelper.VisibleIf="{Binding Items}"
                  easywpf:VisibilityHelper.VisibleIfOption="HasItems"
-                 HorizontalAlignment="Left" Height="111" Margin="97,150,0,0" VerticalAlignment="Top" Width="104" Background="#FF7C7C7C" Foreground="White"/>
-        <Button Content="Remove Item" HorizontalAlignment="Left" Margin="277,210,0,0" VerticalAlignment="Top" Width="142" Height="51" Click="Button_Click_2" />
-        <Button Content="Change List" HorizontalAlignment="Left" Margin="277,271,0,-3" VerticalAlignment="Top" Width="142" Height="51" Click="Button_Click_3" />
+                 HorizontalAlignment="Left" Height="111" Margin="12,131,0,0" VerticalAlignment="Top" Width="104" Background="#FF7C7C7C" Foreground="White"/>
+        <Button Content="Remove Item" HorizontalAlignment="Left" Margin="128,153,0,0" VerticalAlignment="Top" Width="94" Height="41" Click="Button_Click_2" />
+        <Button Content="Change List" HorizontalAlignment="Left" Margin="128,202,0,0" VerticalAlignment="Top" Width="94" Height="40" Click="Button_Click_3" />
 
+        <StackPanel Margin="236,0,0,280">
+            <TextBlock Text="Greater than 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsGreaterThanZero" />
+            <TextBlock Text="Less than 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsLessThanZero"  />
+            <TextBlock Text="Equal to 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsEqualToZero"  />
+            <TextBlock Text="Different than 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsDifferentThanZero"  />
+            <xctk:IntegerUpDown Value="{Binding Value, Mode=TwoWay}" />
+        </StackPanel>
     </Grid>
 </Window>

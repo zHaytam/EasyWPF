@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Windows;
+﻿using System.Windows;
 
 namespace EasyWPF.Helpers
 {
     public class VisibilityHelper : DependencyObject
     {
-
-        #region Fields
-
-        private static readonly Dictionary<INotifyCollectionChanged, FrameworkElement> ElementsOfLists = new Dictionary<INotifyCollectionChanged, FrameworkElement>();
-
-        #endregion
 
         #region Properties
 
@@ -60,83 +50,7 @@ namespace EasyWPF.Helpers
         {
             var element = (FrameworkElement)d;
             var option = (VisibleIfOption)d.GetValue(VisibleIfOptionProperty);
-
-            switch (option)
-            {
-                case VisibleIfOption.AlwaysVisible:
-
-                    if (!element.IsVisible)
-                    {
-                        element.Visibility = Visibility.Visible;
-                    }
-
-                    break;
-                case VisibleIfOption.HasItems:
-
-                    if (e.OldValue is INotifyCollectionChanged oldCollection)
-                    {
-                        oldCollection.CollectionChanged -= Element_CollectionChanged;
-                        ElementsOfLists.Remove(oldCollection);
-                    }
-
-                    if (e.NewValue is INotifyCollectionChanged newCollection)
-                    {
-                        newCollection.CollectionChanged += Element_CollectionChanged;
-                        ElementsOfLists.Add(newCollection, element);
-                        
-                        // In case the new collection has no elements and the element is visible
-                        SetVisibilityFromCollection(newCollection);
-                    }
-
-                    break;
-                case VisibleIfOption.IsNotNull:
-
-                    if (e.NewValue != null && !element.IsVisible)
-                    {
-                        element.Visibility = Visibility.Visible;
-                    }
-                    else if (e.NewValue == null && element.IsVisible)
-                    {
-                        element.Visibility = Visibility.Hidden;
-                    }
-
-                    break;
-                case VisibleIfOption.IsNull:
-
-                    if (e.NewValue == null && !element.IsVisible)
-                    {
-                        element.Visibility = Visibility.Visible;
-                    }
-                    else if (e.NewValue != null && element.IsVisible)
-                    {
-                        element.Visibility = Visibility.Hidden;
-                    }
-
-                    break;
-            }
-        }
-
-        private static void Element_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            SetVisibilityFromCollection(sender as INotifyCollectionChanged);
-        }
-
-        private static void SetVisibilityFromCollection(INotifyCollectionChanged collection)
-        {
-            if (!ElementsOfLists.ContainsKey(collection))
-                return;
-
-            var element = ElementsOfLists[collection];
-            var count = (collection as IList).Count;
-
-            if (count == 0 && element.IsVisible)
-            {
-                element.Visibility = Visibility.Hidden;
-            }
-            else if (count > 0 && !element.IsVisible)
-            {
-                element.Visibility = Visibility.Visible;
-            }
+            VisibieIfOptionsHandlers.HandleVisibleIf(option, element, e.OldValue, e.NewValue);
         }
 
         #endregion
@@ -148,6 +62,10 @@ namespace EasyWPF.Helpers
         AlwaysVisible,
         HasItems,
         IsNull,
-        IsNotNull
+        IsNotNull,
+        IsGreaterThanZero,
+        IsLessThanZero,
+        IsEqualToZero,
+        IsDifferentThanZero
     }
 }

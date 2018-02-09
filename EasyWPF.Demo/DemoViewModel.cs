@@ -7,6 +7,7 @@ namespace EasyWPF.Demo
     {
 
         private object _test;
+        private int _value;
         private ObservableCollection<string> _items = new ObservableCollection<string>();
 
 
@@ -20,6 +21,12 @@ namespace EasyWPF.Demo
         {
             get => _items;
             set => Set(ref _items, value);
+        }
+
+        public int Value
+        {
+            get => _value;
+            set => Set(ref _value, value);
         }
     
     }
