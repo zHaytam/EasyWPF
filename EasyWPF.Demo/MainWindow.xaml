@@ -29,10 +29,22 @@
         <Button Content="Change List" HorizontalAlignment="Left" Margin="128,202,0,0" VerticalAlignment="Top" Width="94" Height="40" Click="Button_Click_3" />
 
         <StackPanel Margin="236,0,0,280">
-            <TextBlock Text="Greater than 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsGreaterThanZero" />
-            <TextBlock Text="Less than 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsLessThanZero"  />
-            <TextBlock Text="Equal to 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsEqualToZero"  />
-            <TextBlock Text="Different than 0" easywpf:VisibilityHelper.VisibleIf="{Binding Value}" easywpf:VisibilityHelper.VisibleIfOption="IsDifferentThanZero"  />
+            <TextBlock Text="Greater than 0" 
+                       easywpf:VisibilityHelper.VisibleIf="{Binding Value}" 
+                       easywpf:VisibilityHelper.VisibleIfCollapse="true"
+                       easywpf:VisibilityHelper.VisibleIfOption="IsGreaterThanZero" />
+            <TextBlock Text="Less than 0" 
+                       easywpf:VisibilityHelper.VisibleIf="{Binding Value}" 
+                       easywpf:VisibilityHelper.VisibleIfCollapse="true"
+                       easywpf:VisibilityHelper.VisibleIfOption="IsLessThanZero"  />
+            <TextBlock Text="Equal to 0" 
+                       easywpf:VisibilityHelper.VisibleIf="{Binding Value}" 
+                       easywpf:VisibilityHelper.VisibleIfCollapse="true"
+                       easywpf:VisibilityHelper.VisibleIfOption="IsEqualToZero"  />
+            <TextBlock Text="Different than 0" 
+                       easywpf:VisibilityHelper.VisibleIf="{Binding Value}" 
+                       easywpf:VisibilityHelper.VisibleIfCollapse="true"
+                       easywpf:VisibilityHelper.VisibleIfOption="IsDifferentThanZero"  />
             <xctk:IntegerUpDown Value="{Binding Value, Mode=TwoWay}" />
         </StackPanel>
     </Grid>

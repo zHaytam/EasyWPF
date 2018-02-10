@@ -2,30 +2,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Reflection;
 using System.Windows;
 
 namespace EasyWPF.Helpers
 {
-    public static class VisibieIfOptionsHandlers
+    public static class VisibleIfOptionsHandlers
     {
 
         #region Fields
 
         private static readonly Dictionary<INotifyCollectionChanged, FrameworkElement> ElementsOfLists = new Dictionary<INotifyCollectionChanged, FrameworkElement>();
 
-        private static readonly Dictionary<VisibleIfOption, Action<FrameworkElement, object, object>> Handlers = new Dictionary<VisibleIfOption, Action<FrameworkElement, object, object>>
-        {
-            { VisibleIfOption.AlwaysVisible, HandleAlwaysVisible },
-            { VisibleIfOption.HasItems, HandleHasItems },
-            { VisibleIfOption.IsNull, HandleIsNull },
-            { VisibleIfOption.IsNotNull, HandleIsNotNull },
-            { VisibleIfOption.IsGreaterThanZero, HandleIsGreaterThanZero },
-            { VisibleIfOption.IsLessThanZero, HandleIsLessThanZero },
-            { VisibleIfOption.IsEqualToZero, HandleIsEqualToZero },
-            { VisibleIfOption.IsDifferentThanZero, HandleIsDifferentThanZero }
-        };
+        private static readonly Dictionary<VisibleIfOption, Action<FrameworkElement, object, object>> Handlers = new Dictionary<VisibleIfOption, Action<FrameworkElement, object, object>>();
 
         #endregion
+
+        static VisibleIfOptionsHandlers()
+        {
+            foreach (var method in typeof(VisibleIfOptionsHandlers).GetMethods(BindingFlags.Static | BindingFlags.NonPublic))
+            {
+                if (!method.Name.StartsWith("Handle"))
+                    continue;
+
+                var optionName = method.Name.Substring(6, method.Name.Length - 6);
+                if (!Enum.TryParse(optionName, out VisibleIfOption option))
+                    continue;
+
+                var deleg = (Action<FrameworkElement, object, object>)method.CreateDelegate(typeof(Action<FrameworkElement, object, object>));
+                Handlers.Add(option, deleg);
+            }
+        }
 
         #region Public Methods
 
@@ -42,7 +49,7 @@ namespace EasyWPF.Helpers
         {
             if (!element.IsVisible)
             {
-                element.Visibility = Visibility.Visible;
+                ShowOrHide(element, true);
             }
         }
 
@@ -68,11 +75,11 @@ namespace EasyWPF.Helpers
         {
             if (newValue == null && !element.IsVisible)
             {
-                element.Visibility = Visibility.Visible;
+                ShowOrHide(element, true);
             }
             else if (newValue != null && element.IsVisible)
             {
-                element.Visibility = Visibility.Hidden;
+                ShowOrHide(element, false);
             }
         }
 
@@ -80,11 +87,11 @@ namespace EasyWPF.Helpers
         {
             if (newValue != null && !element.IsVisible)
             {
-                element.Visibility = Visibility.Visible;
+                ShowOrHide(element, true);
             }
             else if (newValue == null && element.IsVisible)
             {
-                element.Visibility = Visibility.Hidden;
+                ShowOrHide(element, false);
             }
         }
 
@@ -96,7 +103,7 @@ namespace EasyWPF.Helpers
                 {
                     if (!element.IsVisible)
                     {
-                        element.Visibility = Visibility.Visible;
+                        ShowOrHide(element, true);
                     }
 
                     return;
@@ -106,7 +113,7 @@ namespace EasyWPF.Helpers
             // Not an else-if because this also covers the case where the value is <= zero
             if (element.IsVisible)
             {
-                element.Visibility = Visibility.Hidden;
+                ShowOrHide(element, false);
             }
         }
 
@@ -118,7 +125,7 @@ namespace EasyWPF.Helpers
                 {
                     if (!element.IsVisible)
                     {
-                        element.Visibility = Visibility.Visible;
+                        ShowOrHide(element, true);
                     }
 
                     return;
@@ -128,7 +135,7 @@ namespace EasyWPF.Helpers
             // Not an else-if because this also covers the case where the value is >= zero
             if (element.IsVisible)
             {
-                element.Visibility = Visibility.Hidden;
+                ShowOrHide(element, false);
             }
         }
 
@@ -140,7 +147,7 @@ namespace EasyWPF.Helpers
                 {
                     if (!element.IsVisible)
                     {
-                        element.Visibility = Visibility.Visible;
+                        ShowOrHide(element, true);
                     }
 
                     return;
@@ -150,7 +157,7 @@ namespace EasyWPF.Helpers
             // Not an else-if because this also covers the case where the value is != zero
             if (element.IsVisible)
             {
-                element.Visibility = Visibility.Hidden;
+                ShowOrHide(element, false);
             }
         }
 
@@ -162,7 +169,7 @@ namespace EasyWPF.Helpers
                 {
                     if (!element.IsVisible)
                     {
-                        element.Visibility = Visibility.Visible;
+                        ShowOrHide(element, true);
                     }
 
                     return;
@@ -172,7 +179,7 @@ namespace EasyWPF.Helpers
             // Not an else-if because this also covers the case where the value is != zero
             if (element.IsVisible)
             {
-                element.Visibility = Visibility.Hidden;
+                ShowOrHide(element, false);
             }
         }
 
@@ -196,6 +203,19 @@ namespace EasyWPF.Helpers
             else if (count > 0 && !element.IsVisible)
             {
                 element.Visibility = Visibility.Visible;
+            }
+        }
+
+        private static void ShowOrHide(FrameworkElement element, bool show)
+        {
+            if (show)
+            {
+                element.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                bool collapse = (bool)element.GetValue(VisibilityHelper.VisibleIfCollapseProperty);
+                element.Visibility = collapse ? Visibility.Collapsed : Visibility.Hidden;
             }
         }
 

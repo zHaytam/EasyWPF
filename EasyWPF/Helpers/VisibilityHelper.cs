@@ -18,6 +18,11 @@ namespace EasyWPF.Helpers
             typeof(VisibleIfOption),
             typeof(VisibilityHelper));
 
+        public static readonly DependencyProperty VisibleIfCollapseProperty = DependencyProperty.RegisterAttached(
+            "VisibleIfCollapse",
+            typeof(bool),
+            typeof(VisibilityHelper));
+
         #endregion
 
         #region Getters / Setters
@@ -42,6 +47,16 @@ namespace EasyWPF.Helpers
             return (VisibleIfOption)element.GetValue(VisibleIfProperty);
         }
 
+        public static void SetVisibleIfCollapse(UIElement element, bool value)
+        {
+            element.SetValue(VisibleIfProperty, value);
+        }
+
+        public static bool GetVisibleIfCollapse(UIElement element)
+        {
+            return (bool)element.GetValue(VisibleIfProperty);
+        }
+
         #endregion
 
         #region Private methods
@@ -50,7 +65,7 @@ namespace EasyWPF.Helpers
         {
             var element = (FrameworkElement)d;
             var option = (VisibleIfOption)d.GetValue(VisibleIfOptionProperty);
-            VisibieIfOptionsHandlers.HandleVisibleIf(option, element, e.OldValue, e.NewValue);
+            VisibleIfOptionsHandlers.HandleVisibleIf(option, element, e.OldValue, e.NewValue);
         }
 
         #endregion
