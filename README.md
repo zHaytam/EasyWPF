@@ -14,6 +14,7 @@ It provides helpful attached properties to avoid having to create a whole Conver
     - IsLessThanZero: *The element is only visible when the value is less than zero (using int.TryParse).*
     - IsEqualToZero: *The element is only visible when the value is equal to zero (using int.TryParse).*
     - IsDifferentThanZero: *The element is only visible when the value is different than zero (using int.TryParse).*
+ - **VisibleIfCollapse** (used by VisibleIf): *If set to true, the element is collapsed instead of hidden.*
 
 ## Example:
 
